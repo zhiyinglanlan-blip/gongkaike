@@ -2,12 +2,60 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Volume2, Database, BookOpen, ArrowRight, Sparkles, Trash2 } from 'lucide-react';
 
+const playDynamicSound = (type: 'success' | 'error' | 'pop' | 'magic') => {
+  try {
+    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    const now = ctx.currentTime;
+    if (type === 'success') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+      osc.start(now);
+      osc.stop(now + 0.3);
+    } else if (type === 'error') {
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(200, now);
+      osc.frequency.exponentialRampToValueAtTime(100, now + 0.2);
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+      osc.start(now);
+      osc.stop(now + 0.2);
+    } else if (type === 'pop') {
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(600, now);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+      osc.start(now);
+      osc.stop(now + 0.1);
+    } else if (type === 'magic') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(400, now);
+      osc.frequency.linearRampToValueAtTime(1200, now + 0.3);
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.3, now + 0.1);
+      gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+      osc.start(now);
+      osc.stop(now + 0.4);
+    }
+  } catch (e) {}
+};
+
 const SPEAK = (text: string) => {
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'zh-CN';
-    window.speechSynthesis.speak(utterance);
+  if (text.includes("错") || text.includes("不对") || text.includes("不能切")) {
+    playDynamicSound('error');
+  } else if (text.includes("清理") || text.includes("销毁")) {
+    playDynamicSound('pop');
+  } else {
+    playDynamicSound('success');
   }
 };
 
@@ -88,7 +136,7 @@ const Step2 = ({ next }: { next: () => void }) => {
        <div className="relative w-full max-w-lg h-72 border border-indigo-500/50 rounded-3xl flex items-center justify-center bg-slate-900/60 shadow-[inset_0_0_30px_#3b0764]">
           <motion.div 
             whileHover={{ scale: 1.1 }}
-            onClick={() => { setClicked(true); }}
+            onClick={() => { setClicked(true); playDynamicSound('magic'); }}
             className={`cursor-pointer font-black text-amber-500 ${clicked ? 'shadow-[0_0_50px_#f59e0b]' : ''} absolute transition-all`} 
             style={{ fontSize: '6rem', left: '15%', top: '25%', textShadow: '0 0 20px rgba(245,158,11,0.5)' }}
           >
@@ -200,8 +248,8 @@ const Step6 = ({ next }: { next: () => void }) => {
   const [sliderVal, setSliderVal] = useState(3);
   const [merged, setMerged] = useState(false);
 
-  const chars = "悟空举起金箍棒可是行者累了".split("");
-  const validCuts = [1, 6, 8, 10];
+  const chars = "行者见到妖怪便举起金箍棒妖怪休得无礼且吃老孙一棒".split("");
+  const validCuts = [1, 3, 5, 6, 8, 11, 13, 15, 17, 18, 19, 21];
   const [activeCuts, setActiveCuts] = useState<number[]>([]);
   const [shakeStep6, setShakeStep6] = useState(false);
 
@@ -243,7 +291,9 @@ const Step6 = ({ next }: { next: () => void }) => {
          {sub === 0 && (
            <motion.div key="s0" initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -100 }} className="flex flex-col items-center flex-1 justify-center w-full">
               <h3 className="text-3xl mb-8 font-bold text-cyan-300">1. 导入原始数据</h3>
-              <div className="p-8 bg-slate-800/80 rounded-2xl text-2xl border border-slate-600 shadow-xl font-medium tracking-wide">悟空举起金箍棒 可是行者累了</div>
+              <div className="p-8 bg-slate-800/80 rounded-2xl text-[1.4rem] md:text-3xl border border-slate-600 shadow-xl font-medium tracking-wide text-center leading-relaxed">
+                行者见到妖怪便举起金箍棒<br/>妖怪休得无礼且吃老孙一棒
+              </div>
               <button onClick={advance} className="mt-10 px-8 py-3 bg-cyan-600 rounded-full text-xl font-bold shadow-[0_0_15px_rgba(6,182,212,0.5)]">启动流水线</button>
            </motion.div>
          )}
@@ -285,7 +335,7 @@ const Step6 = ({ next }: { next: () => void }) => {
               </motion.div>
 
               <div className="mt-8 h-12">
-                {activeCuts.length >= 4 && (
+                {activeCuts.length >= validCuts.length && (
                   <motion.button initial={{ scale: 0 }} animate={{ scale: 1 }} onClick={advance} className="px-6 py-3 bg-amber-500 text-black font-black rounded-full shadow-[0_0_20px_#f59e0b]">干得漂亮！进入下一步</motion.button>
                 )}
               </div>
@@ -299,24 +349,24 @@ const Step6 = ({ next }: { next: () => void }) => {
               <p className="mb-6 text-indigo-200">如果不管它们，虚词就会霸占主角位置！<span className="text-amber-400 font-bold">请将橘色虚词拖进黑洞销毁！</span></p>
               
               <div className="flex flex-wrap space-x-4 mb-auto mt-4 justify-center items-center h-32 w-full p-4">
-                 <span className="bg-slate-700 p-4 rounded-xl text-2xl shadow-md border border-slate-500">悟空</span>
-                 <span className="bg-slate-700 p-4 rounded-xl text-2xl shadow-md border border-slate-500">金箍棒</span>
+                 <span className="bg-slate-700 p-4 rounded-xl text-2xl shadow-md border border-slate-500">行者</span>
                  
                  <AnimatePresence>
                    {!trashWords[0] && (
                      <motion.div drag dragConstraints={{ top: -100, bottom: 300, left: -400, right: 400 }} dragElastic={0.5} whileDrag={{ scale: 1.2, zIndex: 100 }}
                        onDragEnd={(e, info) => { if (info.offset.y > 150) { setTrashWords(t=>{t[0]=true; return [...t]}); SPEAK("清理完毕！"); } }} 
-                       className="bg-orange-500 cursor-grab p-4 rounded-xl text-2xl font-bold text-white shadow-[0_0_15px_#f97316] z-10">可是</motion.div>
+                       className="bg-orange-500 cursor-grab p-4 rounded-xl text-2xl font-bold text-white shadow-[0_0_15px_#f97316] z-10">便</motion.div>
                    )}
                  </AnimatePresence>
-                 
-                 <span className="bg-slate-700 p-4 rounded-xl text-2xl shadow-md border border-slate-500">行者</span>
+
+                 <span className="bg-slate-700 p-4 rounded-xl text-2xl shadow-md border border-slate-500">妖怪</span>
+                 <span className="bg-slate-700 p-4 rounded-xl text-2xl shadow-md border border-slate-500">金箍棒</span>
                  
                  <AnimatePresence>
                    {!trashWords[1] && (
                      <motion.div drag dragConstraints={{ top: -100, bottom: 300, left: -400, right: 400 }} dragElastic={0.5} whileDrag={{ scale: 1.2, zIndex: 100 }}
                        onDragEnd={(e, info) => { if (info.offset.y > 150) { setTrashWords(t=>{t[1]=true; return [...t]}); SPEAK("完美销毁！"); } }} 
-                       className="bg-orange-500 cursor-grab p-4 rounded-xl text-2xl font-bold text-white shadow-[0_0_15px_#f97316] z-10">了</motion.div>
+                       className="bg-orange-500 cursor-grab p-4 rounded-xl text-2xl font-bold text-white shadow-[0_0_15px_#f97316] z-10">且</motion.div>
                    )}
                  </AnimatePresence>
               </div>
@@ -348,7 +398,7 @@ const Step6 = ({ next }: { next: () => void }) => {
                   transition={{ type: 'spring', bounce: 0.6 }}
                   className="font-black text-amber-500 drop-shadow-[0_0_20px_rgba(245,158,11,0.6)] whitespace-nowrap"
                 >
-                  悟空
+                  妖怪
                 </motion.div>
               </div>
               
@@ -371,13 +421,13 @@ const Step6 = ({ next }: { next: () => void }) => {
            <motion.div key="s4" initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -100 }} className="flex flex-col items-center w-full flex-1">
               <h3 className="text-xl md:text-3xl font-bold text-cyan-300">5. 合义词</h3>
               <CrossLabel it="数据合并 (Merging)" yuwen="同义词指代" />
-              <p className="mb-12 text-indigo-200">“悟空”和“行者”其实是同一个人！<span className="text-amber-400 font-bold">请把右边的紫色卡片拖进左边的主体合并！</span></p>
+              <p className="mb-12 text-indigo-200">“行者”和“老孙”其实是同一个人！<span className="text-amber-400 font-bold">请把右边的紫色卡片拖进左边的主体合并！</span></p>
               
               <div className="flex flex-col md:flex-row items-center w-full justify-center md:space-x-16 space-y-8 md:space-y-0 h-64 relative">
                  
                  {/* Target container */}
                  <motion.div animate={{ scale: merged ? [1, 1.2, 1] : 1 }} className={`w-48 h-48 rounded-full border-4 ${merged ? 'border-amber-400 shadow-[0_0_50px_#f59e0b]' : 'border-dashed border-cyan-400'} flex flex-col justify-center items-center text-cyan-300 transition-all relative z-0`}>
-                   <span className="font-black" style={{ fontSize: merged ? '4.5rem' : '3.5rem' }}>悟空</span>
+                   <span className="font-black" style={{ fontSize: merged ? '4.5rem' : '3.5rem' }}>行者</span>
                    <span className="text-sm font-normal bg-slate-800/80 px-2 py-1 rounded absolute bottom-4 border border-slate-600">总词频: <span className="font-bold text-amber-400 text-lg">{merged ? 10 : 8}</span></span>
                  </motion.div>
                  
@@ -398,7 +448,7 @@ const Step6 = ({ next }: { next: () => void }) => {
                        }}
                        className="bg-fuchsia-600/90 border-2 border-fuchsia-400 p-6 rounded-2xl cursor-grab text-3xl font-bold flex flex-col items-center shadow-[0_0_20px_#c026d3] z-10 w-40"
                      >
-                       行者
+                       老孙
                        <span className="text-sm font-normal mt-2 border-t border-fuchsia-400 pt-2 w-full text-center">词频: 2</span>
                      </motion.div>
                    )}
@@ -517,7 +567,7 @@ const Step8 = ({ next, restart }: { next: () => void, restart?: () => void }) =>
          <div className="w-80 h-56 bg-gradient-to-br from-yellow-300 via-amber-500 to-yellow-600 rounded-2xl border-4 border-yellow-200 shadow-[0_0_80px_#f59e0b] flex flex-col items-center justify-center mb-10 relative overflow-hidden">
             <div className="absolute inset-0 bg-white/20 transform -skew-x-12 translate-x-32 w-12 animate-pulse" />
             <Sparkles className="text-white mb-4 drop-shadow-lg" size={48} />
-            <h2 className="text-3xl font-black text-white drop-shadow-md tracking-wider">首席跨学科数据小侦探</h2>
+            <h2 className="text-3xl font-black text-white drop-shadow-md tracking-wider">跨学科数据小侦探</h2>
             <p className="text-yellow-100 text-sm mt-3 font-bold bg-black/20 px-3 py-1 rounded-full">🎓 语文学科 × 信息技术</p>
          </div>
          <h1 className="text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-fuchsia-400 drop-shadow-sm mb-4">恭喜你，完美通关！</h1>
