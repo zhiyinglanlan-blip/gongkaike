@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "description": "",
+  "name": "跨学科数据小侦探",
+  "description": "一个使用词云图分析文本的跨学科互动教育应用，结合了语文学科和信息技术的知识。",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }
