@@ -78,7 +78,7 @@ const npcText = [
   "最后一步！看图猜故事，这才是跨学科数据小侦探的真本事！"
 ];
 
-const Step1 = ({ next }: { next: () => void }) => {
+const Step1 = ({ next }: { next: () => void, key?: string }) => {
   const [monkeyVotes, setMonkeyVotes] = useState(0);
   const [monkVotes, setMonkVotes] = useState(0);
   const [shake, setShake] = useState(false);
@@ -128,7 +128,7 @@ const Step1 = ({ next }: { next: () => void }) => {
   );
 };
 
-const Step2 = ({ next }: { next: () => void }) => {
+const Step2 = ({ next }: { next: () => void, key?: string }) => {
   const [clicked, setClicked] = useState(false);
   return (
     <motion.div className="flex flex-col items-center w-full h-full justify-center space-y-8" initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}>
@@ -162,7 +162,7 @@ const Step2 = ({ next }: { next: () => void }) => {
   );
 };
 
-const Step3 = ({ next }: { next: () => void }) => {
+const Step3 = ({ next }: { next: () => void, key?: string }) => {
   const cards = [
     { title: "🔍 身份", text: "词云图是文本数据的可视化。" },
     { title: "📏 法则", text: "词频（出现的次数）越高，字号越大！" },
@@ -188,7 +188,7 @@ const Step3 = ({ next }: { next: () => void }) => {
   );
 };
 
-const Step4 = ({ next }: { next: () => void }) => {
+const Step4 = ({ next }: { next: () => void, key?: string }) => {
   const [ans, setAns] = useState<number | null>(null);
   return (
     <div className="flex flex-col items-center justify-center h-full space-y-8 w-full max-w-2xl mx-auto px-4 text-center py-8">
@@ -215,7 +215,7 @@ const Step4 = ({ next }: { next: () => void }) => {
   );
 };
 
-const Step5 = ({ next }: { next: () => void }) => (
+const Step5 = ({ next }: { next: () => void, key?: string }) => (
   <div className="flex flex-col justify-center items-center h-full w-full max-w-3xl mx-auto py-8">
       <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', duration: 1 }} className="text-8xl mb-8 drop-shadow-[0_0_20px_#fff]">
         👨‍🦲
@@ -242,7 +242,7 @@ const Step5 = ({ next }: { next: () => void }) => (
   </div>
 );
 
-const Step6 = ({ next }: { next: () => void }) => {
+const Step6 = ({ next }: { next: () => void, key?: string }) => {
   const [sub, setSub] = useState(0);
   const [trashWords, setTrashWords] = useState([false, false]); 
   const [sliderVal, setSliderVal] = useState(3);
@@ -311,7 +311,7 @@ const Step6 = ({ next }: { next: () => void }) => {
               >
                 {groups.map((g, gIdx) => (
                   <React.Fragment key={gIdx}>
-                    <div className="flex items-center bg-slate-700 px-2 rounded-lg py-1">
+                    <div className="flex flex-wrap justify-center items-center bg-slate-700 px-2 rounded-lg py-1 mb-2">
                       {Array.from({length: g.end - g.start + 1}).map((_, i) => {
                         const charIndex = g.start + i;
                         return (
@@ -323,12 +323,15 @@ const Step6 = ({ next }: { next: () => void }) => {
                                  className="w-4 md:w-6 h-8 mx-1 cursor-pointer bg-slate-600/30 hover:bg-red-400/50 rounded border border-transparent hover:border-red-400 border-dashed transition-all"
                                />
                             )}
+                            {(charIndex === 11 || charIndex === 17) && g.end > charIndex && (
+                               <div className="basis-full h-2"></div>
+                            )}
                           </React.Fragment>
                         )
                       })}
                     </div>
                     {gIdx < groups.length - 1 && (
-                       <motion.div initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} className="w-1.5 h-12 bg-amber-400 shadow-[0_0_15px_#facc15] mx-2 rounded-full" />
+                       <motion.div initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} className={`w-1.5 h-12 bg-amber-400 shadow-[0_0_15px_#facc15] mx-2 rounded-full mb-2 ${(groups[gIdx].end === 11 || groups[gIdx].end === 17) ? 'basis-full h-0 shadow-none mx-0 mb-4 bg-transparent' : ''}`} />
                     )}
                   </React.Fragment>
                 ))}
@@ -488,7 +491,7 @@ const Step6 = ({ next }: { next: () => void }) => {
   );
 };
 
-const Step7 = ({ next }: { next: () => void }) => {
+const Step7 = ({ next }: { next: () => void, key?: string }) => {
   const words = [
     { text: '金箍棒', valid: true },
     { text: '了', valid: false },
@@ -557,7 +560,7 @@ const Step7 = ({ next }: { next: () => void }) => {
   );
 };
 
-const Step8 = ({ next, restart }: { next: () => void, restart?: () => void }) => {
+const Step8 = ({ next, restart }: { next: () => void, restart?: () => void, key?: string }) => {
   const [ans, setAns] = useState<number | null>(null);
   const [done, setDone] = useState(false);
   
