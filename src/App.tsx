@@ -133,18 +133,33 @@ const Step2 = ({ next }: { next: () => void, key?: string }) => {
   return (
     <motion.div className="flex flex-col items-center w-full h-full justify-center space-y-8" initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}>
        <h2 className="text-3xl font-bold text-cyan-300">读懂词云图</h2>
-       <div className="relative w-full max-w-lg h-72 border border-indigo-500/50 rounded-3xl flex items-center justify-center bg-slate-900/60 shadow-[inset_0_0_30px_#3b0764]">
+       <div className="relative w-full max-w-lg h-72 border border-indigo-500/50 rounded-3xl flex items-center justify-center bg-slate-900/60 shadow-[inset_0_0_30px_#3b0764] overflow-hidden select-none">
+          {/* 核心词汇，依然保持可点击交互 */}
           <motion.div 
             whileHover={{ scale: 1.1 }}
             onClick={() => { setClicked(true); playDynamicSound('magic'); }}
-            className={`cursor-pointer font-black text-amber-500 ${clicked ? 'shadow-[0_0_50px_#f59e0b]' : ''} absolute transition-all`} 
-            style={{ fontSize: '6rem', left: '15%', top: '25%', textShadow: '0 0 20px rgba(245,158,11,0.5)' }}
+            className={`cursor-pointer font-black text-amber-500 ${clicked ? 'shadow-[0_0_50px_#f59e0b] z-20' : 'z-10'} absolute transition-all`} 
+            style={{ fontSize: '4.5rem', left: '10%', top: '25%', textShadow: '0 0 20px rgba(245,158,11,0.5)' }}
           >
              孙悟空
           </motion.div>
-          <div className="text-slate-300 absolute font-bold" style={{ fontSize: '2.5rem', right: '15%', top: '20%' }}>妖怪</div>
-          <div className="text-slate-400 absolute font-bold" style={{ fontSize: '1.2rem', left: '10%', bottom: '20%' }}>猪八戒</div>
-          <div className="text-slate-400 absolute font-bold" style={{ fontSize: '1.5rem', right: '30%', bottom: '25%' }}>唐僧</div>
+          
+          {/* 其他高频及中低频词汇，丰富三打白骨精片段词云表现 */}
+          <div className="text-indigo-400 absolute font-bold drop-shadow-md z-10" style={{ fontSize: '3rem', right: '12%', top: '15%' }}>白骨精</div>
+          <div className="text-red-400 absolute font-bold" style={{ fontSize: '2.5rem', left: '15%', bottom: '15%' }}>唐僧</div>
+          <div className="text-cyan-300 absolute font-bold" style={{ fontSize: '2rem', right: '15%', bottom: '20%' }}>猪八戒</div>
+          <div className="text-emerald-300 absolute font-bold" style={{ fontSize: '1.8rem', right: '40%', top: '8%' }}>紧箍咒</div>
+          <div className="text-orange-500 absolute font-bold" style={{ fontSize: '1.8rem', left: '42%', bottom: '10%' }}>金箍棒</div>
+          
+          <div className="text-purple-300 absolute font-medium" style={{ fontSize: '1.5rem', left: '5%', top: '5%' }}>村姑</div>
+          <div className="text-pink-300 absolute font-medium" style={{ fontSize: '1.4rem', right: '5%', top: '50%' }}>老妇人</div>
+          <div className="text-teal-200 absolute font-medium" style={{ fontSize: '1.2rem', left: '25%', top: '15%' }}>老翁</div>
+          <div className="text-indigo-200 absolute font-medium" style={{ fontSize: '1.3rem', right: '35%', bottom: '35%' }}>吃人</div>
+          <div className="text-blue-300 absolute font-medium tracking-widest" style={{ fontSize: '1.1rem', left: '5%', bottom: '50%' }}>肉眼凡胎</div>
+          <div className="text-yellow-300 absolute font-bold" style={{ fontSize: '1.6rem', right: '5%', bottom: '5%' }}>火眼金睛</div>
+          <div className="text-rose-300 absolute font-medium" style={{ fontSize: '1.2rem', left: '30%', bottom: '28%' }}>化斋</div>
+          <div className="text-sky-300 absolute font-medium" style={{ fontSize: '1.1rem', right: '45%', top: '30%' }}>驱逐</div>
+          <div className="text-fuchsia-300 absolute font-medium" style={{ fontSize: '1.2rem', left: '45%', top: '48%' }}>沙僧</div>
        </div>
 
        <div className="h-40">
@@ -152,7 +167,7 @@ const Step2 = ({ next }: { next: () => void, key?: string }) => {
            {clicked && (
              <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="p-6 bg-amber-900/80 border border-amber-400 rounded-2xl max-w-xl text-center shadow-[0_0_30px_#92400e]">
                 <Sparkles className="inline-block text-amber-400 mb-2" size={32}/>
-                <p className="text-amber-100 font-bold text-lg leading-relaxed">🎯 图里字号最大的词，就是语文阅读里的‘核心人物/中心思想’！这就是读懂词云图的秘诀！</p>
+                <p className="text-amber-100 font-bold text-lg leading-relaxed">🎯 用词云图展示<span className="text-amber-400 font-black text-xl">关键词语</span>：用<span className="text-amber-400 font-black text-xl">数据说话</span>，可以提取文章片段的关键词语，用词云图是<span className="text-amber-400 font-black text-xl">分析文本数据</span>的常见方法。</p>
                 <button onClick={next} className="mt-4 px-6 py-2 bg-amber-600 rounded-full font-bold hover:bg-amber-500 shadow-md">探秘神奇法则</button>
              </motion.div>
            )}
@@ -597,10 +612,27 @@ const Step8 = ({ next, restart }: { next: () => void, restart?: () => void, key?
           <p className="text-amber-300 text-lg">用“提炼中心思想”的方法，看图反推这是西游记里的什么故事？</p>
        </div>
 
-       <div className="relative w-full max-w-lg h-56 border rounded-2xl flex justify-center items-center bg-slate-900 border-rose-500/50 shadow-[0_0_30px_#9f1239_inset]">
-          <div className="font-black text-rose-500 absolute drop-shadow-[0_0_15px_#e11d48]" style={{ fontSize: '4.5rem' }}>红孩儿</div>
-          <div className="text-orange-400 absolute font-bold drop-shadow-md" style={{ fontSize: '2.5rem', right: '10%', top: '15%' }}>三昧真火</div>
-          <div className="text-blue-300 absolute font-bold" style={{ fontSize: '1.8rem', left: '15%', bottom: '20%' }}>观音菩萨</div>
+       <div className="relative w-full max-w-lg h-64 border rounded-2xl flex justify-center items-center bg-slate-900 border-rose-500/50 shadow-[0_0_30px_#9f1239_inset] overflow-hidden select-none">
+          {/* 核心角色 / 高频词汇 */}
+          <div className="font-black text-rose-500 absolute drop-shadow-[0_0_15px_#e11d48] z-10" style={{ fontSize: '4.5rem' }}>红孩儿</div>
+          <div className="text-amber-400 absolute font-bold drop-shadow-md z-10" style={{ fontSize: '2.5rem', right: '12%', top: '15%' }}>孙悟空</div>
+          <div className="text-blue-300 absolute font-bold drop-shadow-md z-10" style={{ fontSize: '2.2rem', left: '10%', top: '10%' }}>观音菩萨</div>
+
+          {/* 次高频词汇 */}
+          <div className="text-orange-500 absolute font-bold" style={{ fontSize: '2.0rem', left: '18%', bottom: '15%' }}>三昧真火</div>
+          <div className="text-red-400 absolute font-bold" style={{ fontSize: '1.8rem', right: '15%', bottom: '12%' }}>唐僧</div>
+          <div className="text-stone-300 absolute font-bold" style={{ fontSize: '1.8rem', right: '35%', top: '5%' }}>牛魔王</div>
+
+          {/* 低频词汇 (点缀) */}
+          <div className="text-pink-400 absolute font-medium" style={{ fontSize: '1.4rem', left: '5%', top: '45%' }}>铁扇公主</div>
+          <div className="text-emerald-300 absolute font-medium" style={{ fontSize: '1.5rem', right: '3%', top: '45%' }}>莲花台</div>
+          <div className="text-yellow-500 absolute font-medium" style={{ fontSize: '1.3rem', left: '25%', top: '4%' }}>火尖枪</div>
+          <div className="text-cyan-200 absolute font-medium" style={{ fontSize: '1.2rem', right: '22%', top: '6%' }}>净瓶水</div>
+          <div className="text-fuchsia-300 absolute font-medium tracking-widest" style={{ fontSize: '1.1rem', left: '28%', bottom: '5%' }}>善财童子</div>
+          <div className="text-yellow-300 absolute font-bold" style={{ fontSize: '1.4rem', right: '10%', bottom: '30%' }}>枯松涧</div>
+          <div className="text-red-300 absolute font-medium" style={{ fontSize: '1.2rem', left: '4%', bottom: '10%' }}>火云洞</div>
+          <div className="text-sky-300 absolute font-medium" style={{ fontSize: '1.1rem', right: '40%', bottom: '4%' }}>猪八戒</div>
+          <div className="text-slate-300 absolute font-medium" style={{ fontSize: '1.2rem', left: '45%', top: '22%' }}>吐火烟</div>
        </div>
 
        <div className="flex flex-col w-full max-w-xl space-y-4">
