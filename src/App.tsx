@@ -263,8 +263,8 @@ const Step6 = ({ next }: { next: () => void, key?: string }) => {
   const [sliderVal, setSliderVal] = useState(3);
   const [merged, setMerged] = useState(false);
 
-  const chars = "行者见到妖怪便举起金箍棒妖怪休得无礼且吃老孙一棒".split("");
-  const validCuts = [1, 3, 5, 6, 8, 11, 13, 15, 17, 18, 19, 21];
+  const chars = "沙僧挑担嘿呦呦后面来了白龙马".split("");
+  const validCuts = [1, 3, 6, 8, 10];
   const [activeCuts, setActiveCuts] = useState<number[]>([]);
   const [shakeStep6, setShakeStep6] = useState(false);
 
@@ -295,7 +295,7 @@ const Step6 = ({ next }: { next: () => void, key?: string }) => {
     <div className="flex flex-col items-center w-full h-full space-y-4 relative">
        {/* 进度条：微型流水线 */}
        <div className="flex space-x-2 text-sm md:text-base font-mono text-slate-400 mb-2 bg-slate-900/80 p-3 rounded-2xl border border-indigo-500/30 backdrop-blur-sm w-full overflow-x-auto justify-center hide-scrollbar">
-         {['导入','分词','去废词','算词频','合义词','生成'].map((l, i) => (
+         {['导入','分词','去废词','算词频','合并同义词','生成'].map((l, i) => (
            <span key={l} className={`${sub === i ? 'text-cyan-400 font-bold drop-shadow-[0_0_5px_#22d3ee]' : ''} ${sub > i ? 'text-green-400' : ''}`}>
              {l} {i < 5 && <span className="text-slate-600 mx-2">→</span>}
            </span>
@@ -307,7 +307,7 @@ const Step6 = ({ next }: { next: () => void, key?: string }) => {
            <motion.div key="s0" initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -100 }} className="flex flex-col items-center flex-1 justify-center w-full">
               <h3 className="text-3xl mb-8 font-bold text-cyan-300">1. 导入原始数据</h3>
               <div className="p-8 bg-slate-800/80 rounded-2xl text-[1.4rem] md:text-3xl border border-slate-600 shadow-xl font-medium tracking-wide text-center leading-relaxed">
-                行者见到妖怪便举起金箍棒<br/>妖怪休得无礼且吃老孙一棒
+                沙僧挑担嘿呦呦<br/>后面来了白龙马
               </div>
               <button onClick={advance} className="mt-10 px-8 py-3 bg-cyan-600 rounded-full text-xl font-bold shadow-[0_0_15px_rgba(6,182,212,0.5)]">启动流水线</button>
            </motion.div>
@@ -338,7 +338,7 @@ const Step6 = ({ next }: { next: () => void, key?: string }) => {
                                  className="w-4 md:w-6 h-8 mx-1 cursor-pointer bg-slate-600/30 hover:bg-red-400/50 rounded border border-transparent hover:border-red-400 border-dashed transition-all"
                                />
                             )}
-                            {(charIndex === 11 || charIndex === 17) && g.end > charIndex && (
+                            {(charIndex === 6) && g.end > charIndex && (
                                <div className="basis-full h-2"></div>
                             )}
                           </React.Fragment>
@@ -346,7 +346,7 @@ const Step6 = ({ next }: { next: () => void, key?: string }) => {
                       })}
                     </div>
                     {gIdx < groups.length - 1 && (
-                       <motion.div initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} className={`w-1.5 h-12 bg-amber-400 shadow-[0_0_15px_#facc15] mx-2 rounded-full mb-2 ${(groups[gIdx].end === 11 || groups[gIdx].end === 17) ? 'basis-full h-0 shadow-none mx-0 mb-4 bg-transparent' : ''}`} />
+                       <motion.div initial={{ scaleY: 0 }} animate={{ scaleY: 1 }} className={`w-1.5 h-12 bg-amber-400 shadow-[0_0_15px_#facc15] mx-2 rounded-full mb-2 ${(groups[gIdx].end === 6) ? 'basis-full h-0 shadow-none mx-0 mb-4 bg-transparent' : ''}`} />
                     )}
                   </React.Fragment>
                 ))}
@@ -367,29 +367,28 @@ const Step6 = ({ next }: { next: () => void, key?: string }) => {
               <p className="mb-6 text-indigo-200">如果不管它们，虚词就会霸占主角位置！<span className="text-amber-400 font-bold">请将橘色虚词拖进黑洞销毁！</span></p>
               
               <div className="flex flex-wrap space-x-4 mb-auto mt-4 justify-center items-center h-32 w-full p-4">
-                 <span className="bg-slate-700 p-4 rounded-xl text-2xl shadow-md border border-slate-500">行者</span>
+                 <span className="bg-slate-700 p-4 rounded-xl text-2xl shadow-md border border-slate-500">沙僧</span>
                  
                  <AnimatePresence>
                    {!trashWords[0] && (
                      <motion.div drag dragConstraints={{ top: -100, bottom: 300, left: -400, right: 400 }} dragElastic={0.5} whileDrag={{ scale: 1.2, zIndex: 100 }}
                        onDragEnd={(e, info) => { if (info.offset.y > 150) { setTrashWords(t=>{t[0]=true; return [...t]}); SPEAK("清理完毕！"); } }} 
-                       className="bg-orange-500 cursor-grab p-4 rounded-xl text-2xl font-bold text-white shadow-[0_0_15px_#f97316] z-10">便</motion.div>
+                       className="bg-orange-500 cursor-grab p-4 rounded-xl text-2xl font-bold text-white shadow-[0_0_15px_#f97316] z-10">嘿呦呦</motion.div>
                    )}
                  </AnimatePresence>
 
-                 <span className="bg-slate-700 p-4 rounded-xl text-2xl shadow-md border border-slate-500">妖怪</span>
-                 <span className="bg-slate-700 p-4 rounded-xl text-2xl shadow-md border border-slate-500">金箍棒</span>
+                 <span className="bg-slate-700 p-4 rounded-xl text-2xl shadow-md border border-slate-500">后面</span>
+                 <span className="bg-slate-700 p-4 rounded-xl text-2xl shadow-md border border-slate-500">白龙马</span>
                  
                  <AnimatePresence>
                    {!trashWords[1] && (
                      <motion.div drag dragConstraints={{ top: -100, bottom: 300, left: -400, right: 400 }} dragElastic={0.5} whileDrag={{ scale: 1.2, zIndex: 100 }}
                        onDragEnd={(e, info) => { if (info.offset.y > 150) { setTrashWords(t=>{t[1]=true; return [...t]}); SPEAK("完美销毁！"); } }} 
-                       className="bg-orange-500 cursor-grab p-4 rounded-xl text-2xl font-bold text-white shadow-[0_0_15px_#f97316] z-10">且</motion.div>
+                       className="bg-orange-500 cursor-grab p-4 rounded-xl text-2xl font-bold text-white shadow-[0_0_15px_#f97316] z-10">来了</motion.div>
                    )}
                  </AnimatePresence>
               </div>
               
-              {/* Trash Hole */}
               <div className="w-40 h-40 mt-12 rounded-full bg-black border-4 border-purple-500 shadow-[0_0_40px_#9333ea] flex flex-col items-center justify-center relative z-0 overflow-hidden">
                  <Trash2 className="text-purple-400 mb-1" size={40}/>
                  <span className="font-bold text-purple-300 text-lg tracking-widest">黑洞销毁区</span>
@@ -416,7 +415,7 @@ const Step6 = ({ next }: { next: () => void, key?: string }) => {
                   transition={{ type: 'spring', bounce: 0.6 }}
                   className="font-black text-amber-500 drop-shadow-[0_0_20px_rgba(245,158,11,0.6)] whitespace-nowrap"
                 >
-                  妖怪
+                  白龙马
                 </motion.div>
               </div>
               
@@ -437,19 +436,17 @@ const Step6 = ({ next }: { next: () => void, key?: string }) => {
 
          {sub === 4 && (
            <motion.div key="s4" initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -100 }} className="flex flex-col items-center w-full flex-1">
-              <h3 className="text-xl md:text-3xl font-bold text-cyan-300">5. 合义词</h3>
+              <h3 className="text-xl md:text-3xl font-bold text-cyan-300">5. 合并同义词</h3>
               <CrossLabel it="数据合并 (Merging)" yuwen="同义词指代" />
-              <p className="mb-12 text-indigo-200">“行者”和“老孙”其实是同一个人！<span className="text-amber-400 font-bold">请把右边的紫色卡片拖进左边的主体合并！</span></p>
+              <p className="mb-12 text-indigo-200">“白龙马”和“小白龙”其实是同一个人！<span className="text-amber-400 font-bold">请把右边的紫色卡片拖进左边的主体合并！</span></p>
               
               <div className="flex flex-col md:flex-row items-center w-full justify-center md:space-x-16 space-y-8 md:space-y-0 h-64 relative">
                  
-                 {/* Target container */}
                  <motion.div animate={{ scale: merged ? [1, 1.2, 1] : 1 }} className={`w-48 h-48 rounded-full border-4 ${merged ? 'border-amber-400 shadow-[0_0_50px_#f59e0b]' : 'border-dashed border-cyan-400'} flex flex-col justify-center items-center text-cyan-300 transition-all relative z-0`}>
-                   <span className="font-black" style={{ fontSize: merged ? '4.5rem' : '3.5rem' }}>行者</span>
+                   <span className="font-black" style={{ fontSize: merged ? '3.5rem' : '2.5rem' }}>白龙马</span>
                    <span className="text-sm font-normal bg-slate-800/80 px-2 py-1 rounded absolute bottom-4 border border-slate-600">总词频: <span className="font-bold text-amber-400 text-lg">{merged ? 10 : 8}</span></span>
                  </motion.div>
                  
-                 {/* Draggable entity */}
                  <AnimatePresence>
                    {!merged && (
                      <motion.div 
@@ -458,7 +455,6 @@ const Step6 = ({ next }: { next: () => void, key?: string }) => {
                        dragElastic={0.5}
                        whileDrag={{ scale: 1.1, zIndex: 50 }}
                        onDragEnd={(e, info) => { 
-                         // Check approximate position merge (dragging to left)
                          if (info.offset.x < -40 || info.point.x < window.innerWidth/2) { 
                            setMerged(true); 
                            SPEAK("合并成功！主角地位不可撼动！"); 
@@ -466,7 +462,7 @@ const Step6 = ({ next }: { next: () => void, key?: string }) => {
                        }}
                        className="bg-fuchsia-600/90 border-2 border-fuchsia-400 p-6 rounded-2xl cursor-grab text-3xl font-bold flex flex-col items-center shadow-[0_0_20px_#c026d3] z-10 w-40"
                      >
-                       老孙
+                       小白龙
                        <span className="text-sm font-normal mt-2 border-t border-fuchsia-400 pt-2 w-full text-center">词频: 2</span>
                      </motion.div>
                    )}
@@ -489,13 +485,13 @@ const Step6 = ({ next }: { next: () => void, key?: string }) => {
               <div className="relative w-full max-w-xl h-80 border-2 border-indigo-500/50 rounded-3xl flex items-center justify-center bg-[#071120] shadow-[0_0_50px_rgba(147,51,234,0.3)] overflow-hidden">
                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/20 via-transparent to-transparent" />
                  
-                 <motion.div initial={{ scale:0 }} animate={{ scale:1 }} transition={{ type:'spring', delay:0.2 }} className="font-black text-amber-500 absolute cursor-pointer hover:scale-110 transition-transform" style={{ fontSize: '8rem', textShadow: '0 0 30px #f59e0b', zIndex: 10 }}>悟空</motion.div>
+                 <motion.div initial={{ scale:0 }} animate={{ scale:1 }} transition={{ type:'spring', delay:0.2 }} className="font-black text-amber-500 absolute cursor-pointer hover:scale-110 transition-transform" style={{ fontSize: '8rem', textShadow: '0 0 30px #f59e0b', zIndex: 10 }}>白龙马</motion.div>
                  
-                 <motion.div initial={{ scale:0 }} animate={{ scale:1 }} transition={{ type:'spring', delay:0.6 }} className="text-cyan-300 absolute font-bold hover:scale-110 transition-transform" style={{ fontSize: '2.5rem', right: '10%', top: '20%' }}>金箍棒</motion.div>
+                 <motion.div initial={{ scale:0 }} animate={{ scale:1 }} transition={{ type:'spring', delay:0.6 }} className="text-cyan-300 absolute font-bold hover:scale-110 transition-transform" style={{ fontSize: '2.5rem', right: '10%', top: '20%' }}>沙僧</motion.div>
                  
-                 <motion.div initial={{ scale:0 }} animate={{ scale:1 }} transition={{ type:'spring', delay:0.8 }} className="text-purple-400 absolute font-bold hover:scale-110 transition-transform" style={{ fontSize: '1.2rem', left: '10%', bottom: '25%' }}>降妖</motion.div>
+                 <motion.div initial={{ scale:0 }} animate={{ scale:1 }} transition={{ type:'spring', delay:0.8 }} className="text-purple-400 absolute font-bold hover:scale-110 transition-transform" style={{ fontSize: '1.2rem', left: '10%', bottom: '25%' }}>挑担</motion.div>
                  
-                 <motion.div initial={{ scale:0 }} animate={{ scale:1 }} transition={{ type:'spring', delay:1.0 }} className="text-slate-400 absolute font-bold hover:scale-110 transition-transform" style={{ fontSize: '1.5rem', right: '25%', bottom: '20%' }}>西天</motion.div>
+                 <motion.div initial={{ scale:0 }} animate={{ scale:1 }} transition={{ type:'spring', delay:1.0 }} className="text-slate-400 absolute font-bold hover:scale-110 transition-transform" style={{ fontSize: '1.5rem', right: '25%', bottom: '20%' }}>后面</motion.div>
               </div>
 
               <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2 }} onClick={next} className="mt-12 px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full font-bold animate-pulse text-xl text-white shadow-xl shadow-cyan-500/50">开启大挑战</motion.button>
@@ -505,6 +501,7 @@ const Step6 = ({ next }: { next: () => void, key?: string }) => {
     </div>
   );
 };
+
 
 const Step7 = ({ next }: { next: () => void, key?: string }) => {
   const words = [
