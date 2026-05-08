@@ -244,7 +244,7 @@ const StepWorkflowIntro = ({ next }: { next: () => void, key?: string }) => {
     { q: "分完词，有些词像‘的、了、是’对我们帮助不大，要怎么办？", a: "（去废词）" },
     { q: "接下来，电脑怎么知道哪个词更重要？", a: "（算词频）" },
     { q: "如果遇到‘呆子’和‘猪八戒’，要不要区分那么细？", a: "（合并同义词）" },
-    { q: "最后一步", a: "重点一目了然的词云图诞生啦！" }
+    { q: "最后一步，重点一目了然的词云图诞生啦！", a: "" }
   ];
   const [revealed, setRevealed] = useState<boolean[]>(Array(6).fill(false));
 
@@ -264,9 +264,9 @@ const StepWorkflowIntro = ({ next }: { next: () => void, key?: string }) => {
              initial={{ opacity: 0, y: 20 }} 
              animate={{ opacity: 1, y: 0 }} 
              transition={{ delay: i * 0.15, type: 'spring' }}
-             onClick={() => toggleReveal(i)}
-             className={`relative border-2 rounded-2xl p-6 flex flex-col items-start cursor-pointer transition-all min-h-[140px]
-               ${revealed[i] ? 'bg-indigo-900/60 border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)]' : 'bg-slate-800/80 border-indigo-500/50 shadow-md hover:bg-slate-700/80'}
+             onClick={() => step.a && toggleReveal(i)}
+             className={`relative border-2 rounded-2xl p-6 flex flex-col items-start transition-all min-h-[140px] ${step.a ? 'cursor-pointer' : ''}
+               ${revealed[i] || !step.a ? 'bg-indigo-900/60 border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)]' : 'bg-slate-800/80 border-indigo-500/50 shadow-md hover:bg-slate-700/80'}
              `}
            >
              <div className="flex items-start space-x-3 mb-2 w-full">
@@ -280,14 +280,14 @@ const StepWorkflowIntro = ({ next }: { next: () => void, key?: string }) => {
              
              <div className="flex-1 w-full flex flex-col justify-end">
                <AnimatePresence>
-                 {revealed[i] && (
+                 {revealed[i] && step.a && (
                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} className="mt-4 text-cyan-300 font-extrabold text-2xl tracking-wide w-full overflow-hidden text-center bg-cyan-900/40 rounded-lg py-2 border border-cyan-500/30">
                      {step.a}
                    </motion.div>
                  )}
                </AnimatePresence>
   
-               {!revealed[i] && (
+               {!revealed[i] && step.a && (
                  <p className="text-slate-400 text-sm mt-4 font-medium bg-black/30 px-3 py-1.5 rounded-full w-max mx-auto shadow-inner transition-colors group-hover:text-slate-300">
                     点击查看答案
                  </p>
