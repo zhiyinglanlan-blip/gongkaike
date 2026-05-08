@@ -72,7 +72,7 @@ const npcText = [
   "请在图里点击你认为的‘第一主角’！",
   "准备好接收跨学科的神奇法则了吗？",
   "考考你！怎么才能在词云图里抢占最大的地盘？",
-  "这么神奇的图，是怎么从一段普通的文字变出来的？一起进入词云加工坊吧！",
+  "这么神奇的图，是怎么从一段普通的文字变出来的？为了让大家快速上手，老师带来了一款“词云闯关app”",
   "欢迎来到词云加工坊。跟着流水线，体验数据清洗的魔力！",
   "注意甄别！垃圾数据会污染我们的结果哦！",
   "最后一步！看图猜故事，这才是跨学科数据小侦探的真本事！"
@@ -221,18 +221,18 @@ const Step5 = ({ next }: { next: () => void, key?: string }) => (
           className="text-2xl md:text-3xl font-mono overflow-hidden whitespace-nowrap border-r-4 pr-2 border-transparent text-amber-300 font-bold mb-4"
           transition={{ duration: 1.5, ease: "linear" }}
         >
-          这么神奇的图，是怎么变出来的？
+          文字这么神奇的图，是怎么变出来的？
         </motion.p>
         <motion.p 
           initial={{ width: 0 }} animate={{ width: '100%' }} 
           className="text-2xl md:text-3xl font-mono overflow-hidden whitespace-nowrap border-r-4 pr-2 border-cyan-400 text-amber-300 font-bold"
           transition={{ duration: 1.5, ease: "linear", delay: 1.5 }}
         >
-          一起进入词云加工坊吧！
+          为了让大家快速上手，老师带来了一款“词云闯关app”
         </motion.p>
       </motion.div>
       <motion.button initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 3, type: "spring" }} onClick={next} className="mt-12 px-10 py-4 bg-gradient-to-r from-fuchsia-600 to-purple-600 rounded-full font-bold text-2xl text-white shadow-[0_0_30px_#c026d3] hover:scale-105 transition-transform">
-        进入全自动加工坊 <Sparkles className="inline ml-2" />
+        输入名字，登录app <Sparkles className="inline ml-2" />
       </motion.button>
   </div>
 );
