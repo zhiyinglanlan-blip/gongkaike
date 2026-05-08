@@ -78,7 +78,7 @@ const npcText = [
   "最后一步！看图猜故事，这才是跨学科数据小侦探的真本事！"
 ];
 
-const Step1 = ({ next }: { next: () => void, key?: string }) => {
+const Step2 = ({ next }: { next: () => void, key?: string }) => {
   const [monkeyVotes, setMonkeyVotes] = useState(0);
   const [monkVotes, setMonkVotes] = useState(0);
   const [shake, setShake] = useState(false);
@@ -127,8 +127,7 @@ const Step1 = ({ next }: { next: () => void, key?: string }) => {
   );
 };
 
-const Step2 = ({ next }: { next: () => void, key?: string }) => {
-  const [clicked, setClicked] = useState(false);
+const Step1 = ({ next }: { next: () => void, key?: string }) => {
   const [showCloud, setShowCloud] = useState(false);
   const textExcerpt = "唐僧师徒四人来到宛子山。一天，唐僧感到饥饿，孙悟空便去化斋。山上有一个白骨精，她听说吃了唐僧肉可以长生不老，便动了邪念。白骨精先变作一个美丽的村姑，提着香米饭和炒面筋左拐右拐来诱骗唐僧。孙悟空化斋回来，立刻用火眼金睛识破了妖怪，一棒打死。但妖怪狡猾，留下一具假尸体，真身化作青烟逃走。后来，白骨精又变作寻找女儿的老妇人，拄着拐杖哭哭啼啼走来，再次被孙悟空识破并一棒打死。最后，白骨精变作一个白发老翁，摸索着假装寻找妻女。孙悟空忍无可忍，叫来土地神和山神在空中作证，第三次将其打死，终于让妖怪显了原形——一堆上面刻着“白骨夫人”的白骨。但唐僧肉眼凡胎，不仅不相信孙悟空，反而认为他连杀三人，残杀无辜、屡教不改。在猪八戒的在一旁添油加醋的挑拨下，唐僧大怒，念起紧箍咒疼得悟空满地打滚，最后狠心写下贬书，将孙悟空无情地驱逐回花果山水帘洞。";
 
@@ -137,18 +136,19 @@ const Step2 = ({ next }: { next: () => void, key?: string }) => {
        <div className="flex flex-col md:flex-row items-stretch justify-center w-full max-w-6xl space-y-6 md:space-y-0 md:space-x-6 px-4">
          
          {/* Left Side: Text Excerpt */}
-         <div className="relative flex-1 w-full h-80 md:h-[400px] border-2 border-slate-600/60 rounded-3xl bg-slate-800/60 p-5 md:p-8 shadow-[inset_0_0_30px_#0f172a] overflow-y-auto backdrop-blur-md flex flex-col">
+         <div className="relative flex-1 w-full border-2 border-slate-600/60 rounded-3xl bg-slate-800/60 p-5 md:p-8 shadow-[inset_0_0_30px_#0f172a] backdrop-blur-md flex flex-col">
             <h3 className="text-xl md:text-2xl text-amber-300 font-bold mb-4 border-b border-slate-600/50 pb-3 flex items-center">
               <BookOpen className="mr-3 text-amber-400" size={24}/> 《名著片段节选》
             </h3>
-             <p className="text-base md:text-lg text-slate-300 leading-loose text-justify indent-8 tracking-wide">
+             <p className="text-sm md:text-base text-slate-300 leading-relaxed text-justify indent-8 tracking-wide">
                {textExcerpt}
              </p>
          </div>
 
          {/* Right Side Logic */}
          {!showCloud ? (
-            <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="flex-1 w-full h-80 md:h-[400px] flex flex-col items-center justify-center space-y-8 px-6 md:px-12 border-2 border-dashed border-indigo-500/30 rounded-3xl bg-slate-800/30">
+            <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="flex-1 w-full min-h-[300px] flex flex-col items-center justify-center space-y-8 px-6 md:px-12 border-2 border-dashed border-indigo-500/30 rounded-3xl bg-slate-800/30">
+               <p className="text-xl md:text-2xl text-indigo-200 font-medium text-center leading-relaxed">思考问题：<br/><span className="text-white">阅读名著片段节选，这个节选出现了哪些主要人物？</span></p>
                <button onClick={() => { setShowCloud(true); playDynamicSound('magic'); }} className="px-8 md:px-10 py-4 md:py-5 bg-gradient-to-r from-fuchsia-600 to-purple-600 rounded-full font-bold text-xl md:text-2xl text-white shadow-[0_0_40px_rgba(192,38,211,0.6)] hover:scale-105 transition-all w-full md:w-auto">
                  神奇工具
                </button>
@@ -163,13 +163,13 @@ const Step2 = ({ next }: { next: () => void, key?: string }) => {
              </motion.div>
 
              {/* Right Side: Word Cloud */}
-             <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="relative flex-1 w-full h-80 md:h-[400px] border-2 border-indigo-500/50 rounded-3xl flex items-center justify-center bg-[#071120] shadow-[inset_0_0_40px_#3b0764] overflow-hidden select-none">
+             <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="relative flex-1 w-full min-h-[300px] border-2 border-indigo-500/50 rounded-3xl flex items-center justify-center bg-[#071120] shadow-[inset_0_0_40px_#3b0764] overflow-hidden select-none">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/40 via-transparent to-transparent" />
                 
                 <motion.div 
                   whileHover={{ scale: 1.1 }}
-                  onClick={() => { setClicked(true); playDynamicSound('magic'); }}
-                  className={`cursor-pointer font-black text-amber-500 ${clicked ? 'shadow-[0_0_50px_#f59e0b] z-20' : 'z-10'} absolute transition-all`} 
+                  onClick={() => { playDynamicSound('magic'); next(); }}
+                  className="cursor-pointer font-black text-amber-500 z-10 absolute transition-all"
                   style={{ fontSize: '4rem', left: '15%', top: '25%', textShadow: '0 0 20px rgba(245,158,11,0.5)' }}
                 >
                    孙悟空
@@ -201,48 +201,12 @@ const Step2 = ({ next }: { next: () => void, key?: string }) => {
 
        <div className="h-48 w-full flex items-center justify-center">
          <AnimatePresence>
-           {showCloud && clicked && (
-             <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="flex flex-col items-center">
-                <div className="bg-slate-800/90 border border-indigo-500/50 p-4 rounded-xl mb-4 text-left shadow-[0_0_20px_rgba(79,70,229,0.3)]">
-                   <p className="text-amber-400 font-bold text-lg mb-2 flex items-center"><Sparkles size={20} className="mr-2"/> 思考问题：</p>
-                   <p className="text-white font-medium">1. 词云图有什么特点？</p>
-                   <p className="text-white font-medium">2. 为什么“孙悟空”的字号最大？</p>
-                </div>
-                <button onClick={next} className="px-8 py-3 bg-amber-600 rounded-full text-xl font-bold hover:bg-amber-500 shadow-[0_0_20px_#d97706] text-white">探秘神奇法则</button>
-             </motion.div>
-           )}
-           {showCloud && !clicked && (
+           {showCloud && (
              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-indigo-200 font-medium text-lg">请点击词云中最大的词！</motion.div>
            )}
          </AnimatePresence>
        </div>
     </motion.div>
-  );
-};
-
-const Step3 = ({ next }: { next: () => void, key?: string }) => {
-  const cards = [
-    { title: "🔍 身份", text: "词云图是文本数据的可视化。" },
-    { title: "📏 法则", text: "词频（出现的次数）越高，字号越大！" },
-    { title: "✨ 作用", text: "不用读全文，一秒揪出文章主旨！" }
-  ];
-  return (
-    <div className="flex flex-col items-center justify-center h-full w-full">
-       <h2 className="text-3xl mb-12 font-bold text-cyan-400 tracking-wider">初识神器</h2>
-       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-6">
-         {cards.map((c, i) => (
-           <motion.div key={i} className="bg-indigo-900/40 border border-cyan-500/50 p-6 rounded-2xl shadow-[0_0_20px_rgba(6,182,212,0.2)] backdrop-blur-md w-64 text-center"
-             initial={{ x: 200, opacity: 0 }}
-             animate={{ x: 0, opacity: 1 }}
-             transition={{ delay: i * 0.3, type: 'spring', stiffness: 100 }}
-           >
-             <h3 className="font-black text-amber-400 text-2xl mb-4">{c.title}</h3>
-             <p className="text-indigo-100 text-lg leading-relaxed">{c.text}</p>
-           </motion.div>
-         ))}
-       </div>
-       <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }} onClick={next} className="mt-12 px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-full font-bold text-white shadow-lg text-lg">开启历练</motion.button>
-    </div>
   );
 };
 
@@ -522,74 +486,6 @@ const Step6 = ({ next }: { next: () => void, key?: string }) => {
 };
 
 
-const Step7 = ({ next }: { next: () => void, key?: string }) => {
-  const words = [
-    { text: '金箍棒', valid: true },
-    { text: '了', valid: false },
-    { text: '火焰山', valid: true },
-    { text: '于是乎', valid: false },
-    { text: '的', valid: false },
-    { text: '芭蕉扇', valid: true }
-  ];
-  const [idx, setIdx] = useState(0);
-  const [shake, setShake] = useState(false);
-  
-  const handleSort = (isValidBtn: boolean) => {
-    if (words[idx].valid === isValidBtn) {
-      if (idx === words.length - 1) { SPEAK("全部分拣完毕！完美！"); next(); }
-      else { setIdx(i => i+1); SPEAK("分拣正确！"); }
-    } else {
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
-      SPEAK("选错啦！保留有实在意义的词语才能生成准确的词云！");
-    }
-  }
-
-  return (
-    <div className="flex flex-col items-center justify-center w-full h-full p-4">
-       <h2 className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500 mb-2">跨学科数据小侦探：词汇大分拣</h2>
-       <p className="text-indigo-200 mb-6 text-lg">实词留下来当线索，虚词丢出去免干扰！</p>
-       
-       <div className="relative w-full max-w-sm h-72 border-4 border-indigo-600 rounded-3xl bg-slate-900/80 overflow-hidden flex flex-col drop-shadow-[0_0_30px_rgba(79,70,229,0.3)] shadow-[inset_0_0_20px_#0f172a] mb-12">
-          <div className="h-12 bg-gradient-to-r from-indigo-900 to-indigo-800 flex justify-center items-center border-b-2 border-indigo-500/50 text-indigo-200 font-bold tracking-[0.2em] shadow-md z-10">【 数据传送带 】</div>
-          <div className="flex-1 flex justify-center items-center relative overflow-hidden bg-[#0a0f1d] z-0 px-4">
-             {/* 科技感网格背景 */}
-             <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:1rem_1rem] opacity-20" />
-             
-             <AnimatePresence mode="wait">
-                <motion.div 
-                  key={idx}
-                  initial={{ y: -150, opacity: 0, scale: 0.8 }}
-                  animate={{ x: shake ? [0, -10, 10, -10, 10, 0] : 0, y: 0, opacity: 1, scale: 1 }}
-                  exit={{ y: 150, opacity: 0, scale: 0.5 }}
-                  transition={shake ? { duration: 0.4 } : { type: 'spring', stiffness: 200, damping: 15 }}
-                  className={`border-2 px-8 py-5 rounded-2xl text-4xl font-bold shadow-[0_0_20px_rgba(0,0,0,0.5)] z-10 
-                    ${words[idx]?.valid ? 'bg-gradient-to-br from-slate-700 to-slate-800 border-cyan-400 text-white' : 'bg-gradient-to-br from-slate-700 to-slate-800 border-orange-400 text-white'}`}
-                >
-                   {words[idx]?.text}
-                </motion.div>
-             </AnimatePresence>
-          </div>
-       </div>
-
-       <div className="flex space-x-10">
-          <button onClick={() => handleSort(false)} className="group flex flex-col items-center focus:outline-none">
-             <div className="w-28 h-28 bg-red-900 border-b-8 border-red-950 rounded-[2rem] flex justify-center items-center group-active:border-b-0 group-active:translate-y-2 transition-all shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
-                <Trash2 className="text-red-400" size={40} />
-             </div>
-             <span className="mt-4 font-bold text-red-300 text-xl tracking-wide">语文虚词<br/><span className="text-sm text-red-500">(IT无效数据)</span></span>
-          </button>
-
-          <button onClick={() => handleSort(true)} className="group flex flex-col items-center focus:outline-none">
-             <div className="w-28 h-28 bg-amber-600 border-b-8 border-amber-800 rounded-[2rem] flex justify-center items-center group-active:border-b-0 group-active:translate-y-2 transition-all shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
-                <Sparkles className="text-amber-100" size={40} />
-             </div>
-             <span className="mt-4 font-bold text-amber-300 text-xl tracking-wide">语文实词<br/><span className="text-sm text-amber-500">(IT有效数据)</span></span>
-          </button>
-       </div>
-    </div>
-  );
-};
 
 const Step8 = ({ next, restart }: { next: () => void, restart?: () => void, key?: string }) => {
   const [ans, setAns] = useState<number | null>(null);
@@ -667,8 +563,8 @@ const Step8 = ({ next, restart }: { next: () => void, restart?: () => void, key?
 
 export default function App() {
   const [step, setStep] = useState(1);
-  const nextStep = () => setStep(s => Math.min(s + 1, 7));
-  
+  const nextStep = () => setStep(s => Math.min(s + 1, 5));
+
   return (
      <div className="min-h-screen w-full bg-slate-900 text-white relative font-sans flex flex-col selection:bg-cyan-500/30 overflow-x-hidden">
        
@@ -687,7 +583,7 @@ export default function App() {
          
          {/* 赛博风顶部导航进度条 */}
          <div className="flex space-x-2 md:space-x-4 mb-6 md:mb-8 shrink-0">
-           {[1,2,3,4,5,6,7].map(s => (
+           {[1,2,3,4,5].map(s => (
              <div key={s} className="flex-1 relative h-3 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
                {step >= s && (
                  <motion.div 
@@ -711,11 +607,9 @@ export default function App() {
            <AnimatePresence mode="wait">
              {step === 1 && <Step1 key="s1" next={nextStep} />}
              {step === 2 && <Step2 key="s2" next={nextStep} />}
-             {step === 3 && <Step3 key="s3" next={nextStep} />}
-             {step === 4 && <Step5 key="s5" next={nextStep} />}
-             {step === 5 && <Step6 key="s6" next={nextStep} />}
-             {step === 6 && <Step7 key="s7" next={nextStep} />}
-             {step === 7 && <Step8 key="s8" next={nextStep} restart={() => setStep(1)} />}
+             {step === 3 && <Step5 key="s5" next={nextStep} />}
+             {step === 4 && <Step6 key="s6" next={nextStep} />}
+             {step === 5 && <Step8 key="s8" next={nextStep} restart={() => setStep(1)} />}
            </AnimatePresence>
          </div>
 
