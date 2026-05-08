@@ -138,7 +138,7 @@ const Step1 = ({ next }: { next: () => void, key?: string }) => {
          {/* Left Side: Text Excerpt */}
          <div className="relative flex-1 w-full border-2 border-slate-600/60 rounded-3xl bg-slate-800/60 p-5 md:p-8 shadow-[inset_0_0_30px_#0f172a] backdrop-blur-md flex flex-col">
             <h3 className="text-xl md:text-2xl text-amber-300 font-bold mb-4 border-b border-slate-600/50 pb-3 flex items-center">
-              <BookOpen className="mr-3 text-amber-400" size={24}/> 《名著片段节选》
+              <BookOpen className="mr-3 text-amber-400" size={24}/> 名著片段节选
             </h3>
              <p className="text-sm md:text-base text-slate-300 leading-relaxed text-justify indent-8 tracking-wide">
                {textExcerpt}
@@ -148,7 +148,7 @@ const Step1 = ({ next }: { next: () => void, key?: string }) => {
          {/* Right Side Logic */}
          {!showCloud ? (
             <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="flex-1 w-full min-h-[300px] flex flex-col items-center justify-center space-y-8 px-6 md:px-12 border-2 border-dashed border-indigo-500/30 rounded-3xl bg-slate-800/30">
-               <p className="text-xl md:text-2xl text-indigo-200 font-medium text-center leading-relaxed">思考问题：<br/><span className="text-white">阅读名著片段节选，这个节选出现了哪些主要人物？</span></p>
+               <p className="text-xl md:text-2xl text-indigo-200 font-medium text-center leading-relaxed">思考问题：<br/><span className="text-white">快速浏览，片段中出现了哪些人物？</span></p>
                <button onClick={() => { setShowCloud(true); playDynamicSound('magic'); }} className="px-8 md:px-10 py-4 md:py-5 bg-gradient-to-r from-fuchsia-600 to-purple-600 rounded-full font-bold text-xl md:text-2xl text-white shadow-[0_0_40px_rgba(192,38,211,0.6)] hover:scale-105 transition-all w-full md:w-auto">
                  神奇工具
                </button>
@@ -236,6 +236,72 @@ const Step5 = ({ next }: { next: () => void, key?: string }) => (
       </motion.button>
   </div>
 );
+
+const StepWorkflowIntro = ({ next }: { next: () => void, key?: string }) => {
+  const steps = [
+    { q: "文字还在外面，第一步要先做什么", a: "（导入文本）" },
+    { q: "进了文本之后，电脑要知道我们在说什么，得先把句子怎么样？", a: "（分词）" },
+    { q: "分完词，有些词像‘的、了、是’对我们帮助不大，要怎么办？", a: "（去废词）" },
+    { q: "接下来，电脑怎么知道哪个词更重要？", a: "（算词频）" },
+    { q: "如果遇到‘呆子’和‘猪八戒’，要不要区分那么细？", a: "（合并同义词）" },
+    { q: "最后一步", a: "重点一目了然的词云图诞生啦！" }
+  ];
+  const [revealed, setRevealed] = useState<boolean[]>(Array(6).fill(false));
+
+  const toggleReveal = (index: number) => {
+    const newRevealed = [...revealed];
+    newRevealed[index] = true;
+    setRevealed(newRevealed);
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full p-4">
+       <h2 className="text-3xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500 mb-8 drop-shadow-lg tracking-wider">词云图诞生六步</h2>
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl w-full px-4 mb-6">
+         {steps.map((step, i) => (
+           <motion.div 
+             key={i} 
+             initial={{ opacity: 0, y: 20 }} 
+             animate={{ opacity: 1, y: 0 }} 
+             transition={{ delay: i * 0.15, type: 'spring' }}
+             onClick={() => toggleReveal(i)}
+             className={`relative border-2 rounded-2xl p-6 flex flex-col items-start cursor-pointer transition-all min-h-[140px]
+               ${revealed[i] ? 'bg-indigo-900/60 border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)]' : 'bg-slate-800/80 border-indigo-500/50 shadow-md hover:bg-slate-700/80'}
+             `}
+           >
+             <div className="flex items-start space-x-3 mb-2 w-full">
+               <div className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-black text-xl shadow-inner text-white ${revealed[i] ? 'bg-cyan-600' : 'bg-indigo-600'}`}>
+                 {i + 1}
+               </div>
+               <p className="text-lg md:text-xl font-bold text-slate-200 text-left leading-normal flex-1">
+                 {step.q}
+               </p>
+             </div>
+             
+             <div className="flex-1 w-full flex flex-col justify-end">
+               <AnimatePresence>
+                 {revealed[i] && (
+                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} className="mt-4 text-cyan-300 font-extrabold text-2xl tracking-wide w-full overflow-hidden text-center bg-cyan-900/40 rounded-lg py-2 border border-cyan-500/30">
+                     {step.a}
+                   </motion.div>
+                 )}
+               </AnimatePresence>
+  
+               {!revealed[i] && (
+                 <p className="text-slate-400 text-sm mt-4 font-medium bg-black/30 px-3 py-1.5 rounded-full w-max mx-auto shadow-inner transition-colors group-hover:text-slate-300">
+                    点击查看答案
+                 </p>
+               )}
+             </div>
+           </motion.div>
+         ))}
+       </div>
+       <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} onClick={next} className="mt-4 px-10 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-full font-black text-2xl text-white shadow-[0_0_30px_#22d3ee] hover:scale-105 hover:shadow-[0_0_40px_#22d3ee] transition-all flex items-center z-10 active:scale-95 border border-cyan-400/50">
+         开始体验流水线 <ArrowRight className="inline ml-2" size={28} />
+       </motion.button>
+    </div>
+  );
+};
 
 const Step6 = ({ next }: { next: () => void, key?: string }) => {
   const [sub, setSub] = useState(0);
@@ -563,7 +629,7 @@ const Step8 = ({ next, restart }: { next: () => void, restart?: () => void, key?
 
 export default function App() {
   const [step, setStep] = useState(1);
-  const nextStep = () => setStep(s => Math.min(s + 1, 5));
+  const nextStep = () => setStep(s => Math.min(s + 1, 6));
 
   return (
      <div className="min-h-screen w-full bg-slate-900 text-white relative font-sans flex flex-col selection:bg-cyan-500/30 overflow-x-hidden">
@@ -583,7 +649,7 @@ export default function App() {
          
          {/* 赛博风顶部导航进度条 */}
          <div className="flex space-x-2 md:space-x-4 mb-6 md:mb-8 shrink-0">
-           {[1,2,3,4,5].map(s => (
+           {[1,2,3,4,5,6].map(s => (
              <div key={s} className="flex-1 relative h-3 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
                {step >= s && (
                  <motion.div 
@@ -608,8 +674,9 @@ export default function App() {
              {step === 1 && <Step1 key="s1" next={nextStep} />}
              {step === 2 && <Step2 key="s2" next={nextStep} />}
              {step === 3 && <Step5 key="s5" next={nextStep} />}
-             {step === 4 && <Step6 key="s6" next={nextStep} />}
-             {step === 5 && <Step8 key="s8" next={nextStep} restart={() => setStep(1)} />}
+             {step === 4 && <StepWorkflowIntro key="sw" next={nextStep} />}
+             {step === 5 && <Step6 key="s6" next={nextStep} />}
+             {step === 6 && <Step8 key="s8" next={nextStep} restart={() => setStep(1)} />}
            </AnimatePresence>
          </div>
 
