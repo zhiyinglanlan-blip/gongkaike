@@ -103,7 +103,7 @@ const Step1 = ({ next }: { next: () => void, key?: string }) => {
       exit={{ scale: 1.2, opacity: 0 }}
       transition={shake ? { duration: 0.4 } : {}}
     >
-      <h1 className="text-4xl font-black tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-amber-300 to-red-500 drop-shadow-md">争功风波</h1>
+      <h1 className="text-4xl font-black tracking-widest bg-clip-text text-transparent bg-gradient-to-r from-amber-300 to-red-500 drop-shadow-md">《西游记》第一主角投票</h1>
       <p className="text-lg text-indigo-100">听说孙悟空和唐僧在争论谁是取经第一主角？</p>
       <div className="flex space-x-8">
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => handleVote('monkey')} className="relative w-40 h-56 bg-slate-800/80 rounded-2xl border-2 border-amber-500 flex flex-col items-center justify-center cursor-pointer shadow-[0_0_20px_#f59e0b]">
@@ -656,6 +656,11 @@ export default function App() {
   return (
      <div className="min-h-screen w-full bg-slate-900 text-white relative font-sans flex flex-col selection:bg-cyan-500/30 overflow-x-hidden">
        
+       {/* 右上角水印 */}
+       <div className="absolute top-4 right-6 text-sm text-slate-400 font-medium z-50 pointer-events-none tracking-wider">
+         第24课：抽取文本汇词云
+       </div>
+
        {/* 动态呼吸背景 */}
        <motion.div
          className="fixed inset-0 z-0 bg-gradient-to-br from-[#0f172a] via-[#3b0764] to-[#0f172a]"
